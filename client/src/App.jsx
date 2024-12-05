@@ -10,6 +10,7 @@ import { createContext, useEffect, useState } from 'react';
 import { lockInSession } from './common/session';
 import ProtectedRoute from './components/ProtectedRoute';
 import { BeatLoader } from 'react-spinners';
+import ForgotPassword from './pages/ForgotPassword';
 
 export const UserContext = createContext();
 
@@ -41,7 +42,10 @@ function App() {
   }, []);
 
   if (loading) {
-    return <BeatLoader size={"100%"} color='36d7b7' />;
+    return <div className='flex justify-center items-center h-screen'>
+      <BeatLoader size={"100%"} color='36d7b7' />
+      Loading...
+    </div>;
   }
 
   return (
@@ -56,10 +60,8 @@ function App() {
             />
             <Route path="/auth" element={<Auth />} />
             <Route path="/link/:id" element={<LinkPage />} />
-            <Route path="/forgot-password" element={< br />} />
+            <Route path="/forgot-password" element={< ForgotPassword />} />
             <Route path="/:id" element={<Redirecting />} />
-
-
           </Route>
         </Routes>
       </Router>

@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
@@ -10,7 +11,10 @@ const { CLICKS } = require("./model/clicks");
 const { URL } = require("./model/urls");
 const cors = require("cors");
 const multer = require("multer");
+const nodemailer = require("nodemailer");
+
 const UAParser = require("ua-parser-js");
+const { config } = require("dotenv");
 
 const app = express();
 app.use(bodyParser.json());
@@ -86,7 +90,6 @@ app.post("/login", async (req, res) => {
     res.status(500).json({ error: "Internal server error." });
   }
 });
-
 
 const generateShortUrl = () => {
   return shortid.generate();
@@ -200,9 +203,7 @@ app.delete("/delete-url/:id", auth, async (req, res) => {
         $set: { total_links: newTotalLinks },
       },
       { new: true }
-    ).then((res) => {
-      console.log(res);
-    });
+    ).then((res) => {});
 
     res.status(200).json({ message: "URL deleted successfully", deletedURL });
   } catch (err) {
@@ -257,8 +258,58 @@ const storeClicks = async (id) => {
   }
 };
 
+app.post("/forgot-password", async (req, res) => {
+  const { email } = req.body;
+  const user = await USER.findOne({ email: email });
+  if (!user) return res.status(404).json({ error: "User not found" });
+  const otp = Math.floor(100000 + Math.random() * 900000);
+  user.reset_password_otp = otp;
+  user.reset_password_otp_expires = Date.now() + 10 * 60 * 1000;
+  await user.save();
+
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.EMAIL,
+      pass: process.env.EMAIL_PASSWORD,
+    },
+  });
+  const mailOptions = {
+    to: user.email,
+    from: process.env.EMAIL,
+    subject: "Password Reset OTP",
+    text: `Your password reset OTP is: ${otp}. It is valid for 10 minutes.`,
+  };
+
+  await transporter.sendMail(mailOptions);
+  res.status(200).json({
+    message: "OTP sent to your email",
+    otp,
+    expires: user.reset_password_otp_expires,
+  });
+});
+
+app.post("/reset-password", async (req, res) => {
+  try {
+    const { password, email } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = await USER.findOne({ email:email });
+    if (!user) {
+      return res.status(404).json({ error: "User not found." });
+    }
+    user.password = hashedPassword;
+    await user.save();
+    return res.status(200).json({ message: "Password reset successfully.",success:true });
+  } catch (error) {
+    console.error("Password reset failed:", error);
+    return res
+      .status(500)
+      .json({ error: "An error occurred while resetting the password." });
+  }
+});
+
 // Start the server
-const PORT = 8000;
+const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
   console.log(`Server is running at http://localhost:${PORT}`);
 });
