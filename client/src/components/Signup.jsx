@@ -14,6 +14,7 @@ import Error from './Error';
 import { Button } from './ui/button';
 import toast from 'react-hot-toast';
 import axios from 'axios';
+import { CreativeCommons, CreditCardIcon } from 'lucide-react';
 
 const validationSchema = Yup.object({
     email: Yup.string()
@@ -60,8 +61,8 @@ const Signup = ({ setIsCreated }) => {
         <div className="flex justify-center mt-5 items-center">
             <Card className="w-full shadow-lg p-4 rounded-lg">
                 <CardHeader className="text-center">
-                    <CardTitle className="text-2xl font-bold">Sign Up</CardTitle>
-                    <CardDescription className="text-sm">Create your account</CardDescription>
+                    <CardTitle className="text-2xl font-bold">
+                        Sign Up</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2">
                     <form onSubmit={formik.handleSubmit}>

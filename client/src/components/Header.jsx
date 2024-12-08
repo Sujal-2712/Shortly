@@ -22,9 +22,9 @@ const Header = () => {
     const navigate = useNavigate();
     const { userAuth, setUserAuth } = useContext(UserContext);
     return (
-        <div className="flex justify-between items-center lg:px-10 px-5 pr-10">
-            <Link to="/" className="">
-                <img src={design} className=" h-20  my-4 bg-transparent" alt="Trimmr Logo" />
+        <div className="flex justify-between items-center px-10 pr-10">
+            <Link to="/">
+                <img src={design} className=" md:h-20 h-14 my-4 bg-transparent" alt="Trimmr Logo" />
             </Link>
 
             <div>
@@ -39,17 +39,20 @@ const Header = () => {
                             </Avatar>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent>
-                            <DropdownMenuLabel className="text-lg">{userAuth?.email}</DropdownMenuLabel>
+                            <DropdownMenuLabel className="text-lg">{userAuth?.email.split["@"]}</DropdownMenuLabel>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem className="text-md cursor-pointer">
                                 <Link to="/dashboard" className="flex gap-2"><LinkIcon /> My Links</Link>
 
                             </DropdownMenuItem>
-                            
+
                             <DropdownMenuItem
                                 className="font-semibold text-md cursor-pointer"
+                                onClick={() => {
+                                    navigate("/reset-password");
+                                }}
                             >
-                                <Lock/>
+                                <Lock />
                                 Reset Password
                             </DropdownMenuItem>
 
@@ -58,9 +61,9 @@ const Header = () => {
                                 onClick={() => {
                                     removeFromSession("user");
                                     setUserAuth({
-                                        access_token:null,
-                                        profile_img:null,
-                                        email:null
+                                        access_token: null,
+                                        profile_img: null,
+                                        email: null
                                     });
                                     toast.success("Logout Sucessfully!!")
                                     navigate("/");

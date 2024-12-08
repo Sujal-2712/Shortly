@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios'; // Import axios
 import { UserContext } from "../App";
 import { storeInSession } from '@/common/session';
+import { LogIn, LogInIcon } from 'lucide-react';
 
 const Login = () => {
     const navigate = useNavigate();
@@ -45,8 +46,6 @@ const Login = () => {
                     toast.error('Login failed. Please check your credentials.');
                 }
             } catch (err) {
-                // If there's an error, display a toast with the error message
-            
                 toast.error(err.response?.data?.error || "Error occured!!");
                 console.error('Login failed:', err);
             }
@@ -55,10 +54,11 @@ const Login = () => {
 
     return (
         <div className="flex justify-center mt-5 items-center">
-            <Card className="w-full shadow-lg p-4 rounded-lg">
+            <Card className="w-full shadow-lg  p-4 rounded-lg">
                 <CardHeader className="text-center">
-                    <CardTitle className="text-2xl font-bold">Login</CardTitle>
-                    <CardDescription className="text-sm">Access your account</CardDescription>
+                    <CardTitle className="text-2xl font-bold flex items-center justify-center gap-2">
+                        <LogInIcon style={{height:'30px',width:'30px'}}/>
+                        Login</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2">
                     <form onSubmit={formik.handleSubmit}>

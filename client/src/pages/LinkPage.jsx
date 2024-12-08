@@ -103,7 +103,7 @@ const LinkPage = () => {
                     variant="ghost"
                     className="text-blue-500 hover:bg-blue-500 text-lg py-3 px-6"
                     onClick={() => {
-                      navigator.clipboard.writeText(url.short_url);
+                      navigator.clipboard.writeText(`${API_URL}/`+url.short_url);
                       toast.success("Copied to Clipboard!");
                     }}
                   >

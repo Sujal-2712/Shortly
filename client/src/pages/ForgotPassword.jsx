@@ -9,7 +9,6 @@ import * as Yup from 'yup';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { UserContext } from './../App';
 
 const ForgotPassword = () => {
     const [otpSent, setOtpSent] = useState(false);
@@ -96,8 +95,8 @@ const ForgotPassword = () => {
                 const response = await axios.post(`${API_URL}/reset-password`, { email: userEmail, password: values.newPassword });
                 if (response && response.data.success) {
                     toast.success('Password reset successfully');
-                    setOtpSent(false); // Reset OTP state
-                    setPasswordReset(false); // Reset password reset state
+                    setOtpSent(false);
+                    setPasswordReset(false);
                     formikPassword.resetForm();
                     navigate("/auth");
                 }

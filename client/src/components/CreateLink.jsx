@@ -71,16 +71,12 @@ const CreateLink = ({ links, setLinks }) => {
                     'Authorization': `Bearer ${userAuth.access_token}`,
                 },
             });
-            console.log(response);
-
             if (response.status === 201) {
                 setLinks((prevLinks) => [...prevLinks, response.data?.data])
                 toast.success("URL shortened successfully!");
                 setFormValues({ title: "", longUrl: "", customUrl: "" });
                 setIsOpen(false);
             }
-
-            console.log('Server Response:', response.data);
         } catch (error) {
             if (error.name === "ValidationError") {
                 const fieldErrors = error.inner.reduce((acc, curr) => {

@@ -289,17 +289,19 @@ app.post("/forgot-password", async (req, res) => {
   });
 });
 
-app.post("/reset-password", async (req, res) => {
+app.post("/reset-password", auth, async (req, res) => {
   try {
-    const { password, email } = req.body;
+    const { password } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await USER.findOne({ email:email });
+    const user = await USER.findOne({ _id: req.user });
     if (!user) {
       return res.status(404).json({ error: "User not found." });
     }
     user.password = hashedPassword;
     await user.save();
-    return res.status(200).json({ message: "Password reset successfully.",success:true });
+    return res
+      .status(200)
+      .json({ message: "Password reset successfully.", success: true });
   } catch (error) {
     console.error("Password reset failed:", error);
     return res

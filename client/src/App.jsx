@@ -5,6 +5,7 @@ import LandingPage from './pages/LandingPage';
 import Dashboard from './pages/Dashboard';
 import LinkPage from './pages/LinkPage';
 import Auth from './pages/Auth';
+import ResetPassword from './components/ResetPassword';
 import Redirecting from './pages/Redirecting';
 import { createContext, useEffect, useState } from 'react';
 import { lockInSession } from './common/session';
@@ -58,6 +59,7 @@ function App() {
               path="/dashboard"
               element={<ProtectedRoute element={<Dashboard />} />}
             />
+            <Route path="/reset-password" element={<ResetPassword/>}></Route>
             <Route path="/auth" element={<Auth />} />
             <Route path="/link/:id" element={<LinkPage />} />
             <Route path="/forgot-password" element={< ForgotPassword />} />
